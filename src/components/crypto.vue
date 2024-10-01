@@ -61,11 +61,6 @@ library.add(faArrowDown)
         </tr>
       </tbody>
       </table>
-
-      <!-- <li v-for="(coin, index) in coincap" :class="{top3: index < 3, negative: coin.changePercent24Hr < 0, positive: coin.changePercent24Hr > 0}"> Ranking: {{ coin.rank }} | Nombre: {{ coin.name }} 
-        <span v-if="coin.changePercent24Hr > 0" ><font-awesome-icon :icon="['fas', 'arrow-up']" /></span>
-        <span v-else ><font-awesome-icon :icon="['fas', 'arrow-down']" /></span>
-      </li> -->
     </div>
     <button @click="porNombre()">{{ mensajeBoton}}</button>
   </div>
