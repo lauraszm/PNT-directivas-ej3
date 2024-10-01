@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
 
 library.add(faArrowUp)
 library.add(faArrowDown)
@@ -13,9 +14,9 @@ library.add(faArrowDown)
 
     const llamarACoincap = async () => {
       try {
-        const response = await fetch('https://api.coincap.io/v2/assets?limit=10');
-        const data = await response.json();
-        coincap.value = data.data;
+        const response = await axios.get('https://api.coincap.io/v2/assets?limit=10');
+        coincap.value = response.data.data;
+        console.log(coincap.value)
       } catch (error) {
         console.error('Error al obtener coincap:', error);
       } 
@@ -45,11 +46,26 @@ library.add(faArrowDown)
 
   <div>
     <div >
-      <!-- (item, index) in items -->
-      <li v-for="(coin, index) in coincap" :class="{top3: index < 3, negative: coin.changePercent24Hr < 0, positive: coin.changePercent24Hr > 0}"> Ranking: {{ coin.rank }} | Nombre: {{ coin.name }} 
+      <table>
+        <tbody>
+        <tr>
+          <th>Ranking</th>
+          <th>Nombre</th>
+          <th>Variacion 24hs</th>
+        </tr>
+        <tr v-for="(coin, index) in coincap" :class="{top3: index < 3, negative: coin.changePercent24Hr < 0, positive: coin.changePercent24Hr > 0}">
+          <td>{{ coin.rank }}</td>
+          <td> {{ coin.name }}</td>
+          <td><span v-if="coin.changePercent24Hr > 0" ><font-awesome-icon :icon="['fas', 'arrow-up']" /></span>
+            <span v-else ><font-awesome-icon :icon="['fas', 'arrow-down']" /></span></td>
+        </tr>
+      </tbody>
+      </table>
+
+      <!-- <li v-for="(coin, index) in coincap" :class="{top3: index < 3, negative: coin.changePercent24Hr < 0, positive: coin.changePercent24Hr > 0}"> Ranking: {{ coin.rank }} | Nombre: {{ coin.name }} 
         <span v-if="coin.changePercent24Hr > 0" ><font-awesome-icon :icon="['fas', 'arrow-up']" /></span>
         <span v-else ><font-awesome-icon :icon="['fas', 'arrow-down']" /></span>
-      </li>
+      </li> -->
     </div>
     <button @click="porNombre()">{{ mensajeBoton}}</button>
   </div>
